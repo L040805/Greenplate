@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GreenPlate</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--sb:#0f2318;--sh:rgba(255,255,255,0.07);--ga:#2d7a52;--bg:#f4f4f0;--card:#fff;--bdr:#e4e4de;--tx:#1a1a18;--mu:#6a6a66;--fa:#aaa;--gn:#2d7a52;--gl:#e8f5ed;--gb:#b3d9c2;--rd:#c04038;--rl:#fdf0ef;--rb:#f0bfbc;--am:#b07820;--al:#fdf6e7;--ab:#e8cf98;--bl:#3a5fad;--ll:#eef3fd;--lb:#bfcff0;--r:10px;--r2:14px;}
+html,body{height:100%;font-family:'Outfit',sans-serif;font-size:14px;color:var(--tx);background:var(--bg);overflow:hidden;}
+#app{display:flex;height:100vh;width:100vw;}
+aside{width:236px;min-width:236px;background:var(--sb);display:flex;flex-direction:column;}
+.logo{display:flex;align-items:center;gap:11px;padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.logo-ic{width:36px;height:36px;border-radius:9px;background:var(--ga);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-ic svg{width:19px;height:19px;}
+.logo-n{color:#fff;font-size:15px;font-weight:600;}
+.logo-s{color:rgba(255,255,255,0.4);font-size:11px;margin-top:1px;}
+nav{flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:2px;}
+.ni{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;color:rgba(255,255,255,0.55);font-size:14px;cursor:pointer;transition:all .15s;border:none;background:transparent;width:100%;text-align:left;}
+.ni:hover{background:var(--sh);color:rgba(255,255,255,.85);}
+.ni.active{background:var(--ga);color:#fff;font-weight:500;}
+.ni svg{width:17px;height:17px;flex-shrink:0;}
+.nb{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--rd);color:#fff;font-size:10px;font-weight:600;margin-left:auto;}
+.sb-ft{padding:10px 8px 18px;border-top:1px solid rgba(255,255,255,.07);}
+main{flex:1;overflow-y:auto;background:var(--bg);-webkit-overflow-scrolling:touch;}
+main::-webkit-scrollbar{width:4px;}
+main::-webkit-scrollbar-thumb{background:#ccc;border-radius:2px;}
+.pg{display:none;padding:30px 32px 40px;}
+.pg.on{display:block;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px;}
+.ph h1{font-size:26px;font-weight:600;letter-spacing:-.02em;margin-bottom:5px;}
+.ph p{font-size:13px;color:var(--mu);}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .14s;border:1px solid var(--bdr);background:var(--card);color:var(--tx);}
+.btn:active{transform:scale(.97);}
+.btn-p{background:var(--gn);border-color:var(--gn);color:#fff;}
+.btn-p:hover{background:#246040;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-ic{padding:6px 8px;color:var(--mu);border-color:transparent;background:transparent;}
+.btn-dl{padding:6px 8px;color:var(--rd);border-color:transparent;background:transparent;}
+.btn-tab{padding:7px 16px;font-size:13px;border-radius:8px;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;font-family:'Outfit',sans-serif;font-weight:400;transition:all .14s;}
+.btn-tab.on{background:var(--gl);border-color:var(--gb);color:var(--gn);font-weight:500;}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
+.sc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px;display:flex;justify-content:space-between;align-items:flex-start;}
+.sc-lb{font-size:13px;color:var(--mu);margin-bottom:10px;}
+.sc-v{font-size:28px;font-weight:600;letter-spacing:-.02em;}
+.sc-s{font-size:12px;color:var(--mu);margin-top:4px;}
+.sc-ic{width:40px;height:40px;border-radius:10px;background:var(--gl);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sc-ic svg{width:20px;height:20px;stroke:var(--gn);}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;}
+.b-rd{background:var(--rl);color:var(--rd);border:1px solid var(--rb);}
+.b-am{background:var(--al);color:var(--am);border:1px solid var(--ab);}
+.b-gn{background:var(--gl);color:var(--gn);border:1px solid var(--gb);}
+.b-gy{background:#f0f0ec;color:var(--mu);border:1px solid var(--bdr);}
+.b-bl{background:var(--ll);color:var(--bl);border:1px solid var(--lb);}
+.sh{font-size:15px;font-weight:600;margin-bottom:14px;}
+.dc2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px 22px;}
+.dli{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bdr);}
+.dli:last-child{border-bottom:none;}
+.tw{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:11px 16px;font-size:12px;font-weight:500;color:var(--mu);border-bottom:1px solid var(--bdr);background:#fafaf8;}
+td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafaf8;}
+.tda{display:flex;gap:4px;justify-content:flex-end;}
+.fb{display:flex;align-items:center;gap:8px;}
+.fb-t{width:64px;height:5px;background:#e8e8e3;border-radius:3px;overflow:hidden;}
+.fb-f{height:100%;border-radius:3px;}
+.fr{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.sr{position:relative;flex:1;min-width:180px;max-width:320px;}
+.sr-i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none;}
+.sr input[type="text"]{padding-left:40px;}
+input[type="text"],input[type="number"],input[type="date"],select,textarea{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:9px 13px;color:var(--tx);font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--gn);}
+textarea{resize:vertical;min-height:68px;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.dc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:18px 20px;}
+.dc-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;}
+.dc-n{font-size:15px;font-weight:600;}
+.dc-d{font-size:12px;color:var(--mu);margin-bottom:10px;line-height:1.5;}
+.dc-tg{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.itag{font-size:11px;padding:3px 8px;background:#f0f0ec;border-radius:20px;color:var(--mu);cursor:pointer;}
+.itag:hover{background:var(--gl);color:var(--gn);}
+.dc-ft{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--bdr);}
+.dp-inf{background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:14px 18px;margin-bottom:20px;}
+.dp-inf-t{font-size:14px;font-weight:600;color:var(--gn);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.dp-inf-b{font-size:13px;color:#3a6548;line-height:1.6;}
+.dpg{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.dpc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px 22px;display:flex;flex-direction:column;}
+.dpc-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.dpc-n{font-size:15px;font-weight:600;}
+.dpc-c{font-size:12px;color:var(--mu);margin-bottom:12px;}
+.av{border-radius:var(--r);padding:12px 14px;margin:8px 0 14px;}
+.av.high{background:var(--rl);border:1px solid var(--rb);}
+.av.medium{background:var(--al);border:1px solid var(--ab);}
+.av.low{background:var(--gl);border:1px solid var(--gb);}
+.av.none{background:#f5f5f2;border:1px solid var(--bdr);}
+.av-rec{font-size:13px;font-weight:600;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;}
+.av-rec.high{color:var(--rd);}
+.av-rec.medium{color:var(--am);}
+.av-rec.low{color:var(--gn);}
+.av-rec.none{color:var(--mu);}
+.av-list{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.av-list li{font-size:11px;display:flex;align-items:flex-start;gap:5px;}
+.av-list li::before{content:'•';flex-shrink:0;}
+.av-list li.high{color:var(--rd);}
+.av-list li.medium{color:var(--am);}
+.av-list li.low{color:var(--gn);}
+.av-list li.none{color:var(--mu);}
+.sb2{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:22px 24px;margin-bottom:18px;}
+.sb2-h{font-size:16px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.sb2-s{font-size:13px;color:var(--mu);margin-bottom:18px;}
+.stg{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.stc{background:#fafaf8;border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;}
+.stc-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.stc-n{font-size:15px;font-weight:600;}
+.stc-c{font-size:12px;color:var(--mu);margin-bottom:10px;}
+.stc-info{background:#f5f5f2;border:1px solid var(--bdr);border-radius:7px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--mu);line-height:1.6;}
+.stc-info strong{color:var(--tx);}
+.wstats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;}
+.wsc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px 22px;}
+.wsc-l{font-size:13px;color:var(--mu);margin-bottom:10px;}
+.wsc-v{font-size:28px;font-weight:600;}
+.wsc-v.red{color:var(--rd);}
+.wan{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.wan-box{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:16px 18px;}
+.wan-title{font-size:12px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;}
+.wan-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:13px;}
+.wan-row:last-child{border-bottom:none;}
+.mw{position:fixed;inset:0;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
+.mw.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:var(--r2);padding:28px 30px;width:520px;max-width:94vw;max-height:90vh;overflow-y:auto;transform:translateY(10px);transition:transform .2s;border:1px solid var(--bdr);box-shadow:0 10px 50px rgba(0,0,0,.14);}
+.modal.wide{width:580px;}
+.mw.open .modal{transform:translateY(0);}
+.modal h2{font-size:19px;font-weight:600;margin-bottom:4px;}
+.msub{font-size:13px;color:var(--mu);margin-bottom:22px;}
+.fl{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
+.fl label{font-size:11px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.ma{display:flex;gap:9px;margin-top:22px;justify-content:flex-end;}
+.deduct-box{background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:12px 14px;margin-top:12px;display:none;}
+.deduct-box.show{display:block;}
+.deduct-lbl{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;}
+.deduct-lbl input{width:auto;accent-color:var(--gn);}
+.deduct-prev{font-size:12px;color:var(--gn);margin-top:6px;padding-left:22px;}
+.ic-wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:160px;overflow-y:auto;border:1px solid var(--bdr);border-radius:8px;padding:10px;}
+.ic-lbl{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:3px 0;}
+.ic-lbl input[type="checkbox"]{width:auto;accent-color:var(--gn);cursor:pointer;}
+.aj-av{border-radius:var(--r);padding:14px 16px;margin-bottom:18px;}
+.aj-av.high{background:var(--rl);border:1px solid var(--rb);}
+.aj-av.medium{background:var(--al);border:1px solid var(--ab);}
+.aj-av.low{background:var(--gl);border:1px solid var(--gb);}
+.aj-av.none{background:#f5f5f2;border:1px solid var(--bdr);}
+.aj-av-t{font-size:13px;font-weight:600;margin-bottom:8px;}
+.aj-av-t.high{color:var(--rd);}
+.aj-av-t.medium{color:var(--am);}
+.aj-av-t.low{color:var(--gn);}
+.aj-av-t.none{color:var(--mu);}
+.aj-av-r{font-size:12px;display:flex;flex-direction:column;gap:4px;}
+.db{font-size:42px;font-weight:600;color:var(--gn);text-align:center;margin:6px 0;}
+.rl2{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-top:5px;}
+input[type="range"]{-webkit-appearance:none;width:100%;height:4px;background:var(--bdr);border-radius:2px;outline:none;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--gn);cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 2px var(--gn);}
+.pp{background:#fafaf8;border:1px solid var(--bdr);border-radius:var(--r);padding:13px 15px;margin-top:12px;}
+.pp-l{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.pp-r{display:flex;align-items:baseline;gap:8px;}
+.pp-n{font-size:22px;font-weight:600;color:var(--gn);}
+.pp-w{font-size:13px;color:var(--fa);text-decoration:line-through;}
+.pp-m{font-size:12px;color:var(--mu);margin-top:6px;}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--tx);color:#fff;padding:11px 22px;border-radius:8px;font-size:13px;opacity:0;transition:all .22s;z-index:200;white-space:nowrap;pointer-events:none;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.empty{text-align:center;padding:40px 20px;color:var(--mu);font-size:13px;}
+.lnk{background:none;border:none;color:var(--gn);font-size:12px;cursor:pointer;text-decoration:underline;padding:0;font-family:'Outfit',sans-serif;}
+.al-section{margin-bottom:26px;}
+.al-section-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.al-section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+.al-section-title.red{color:var(--rd);}
+.al-section-title.amber{color:var(--am);}
+.al-section-title.blue{color:var(--bl);}
+.al-section-title.green{color:var(--gn);}
+.al-count{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:600;}
+.al-count.red{background:var(--rl);color:var(--rd);}
+.al-count.amber{background:var(--al);color:var(--am);}
+.al-count.blue{background:var(--ll);color:var(--bl);}
+.al-count.green{background:var(--gl);color:var(--gn);}
+.al-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:15px 18px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.al-card.al-rd{border-left:4px solid var(--rd);}
+.al-card.al-am{border-left:4px solid var(--am);}
+.al-card.al-bl{border-left:4px solid var(--bl);}
+.al-card.al-gn{border-left:4px solid var(--gn);}
+.al-left{flex:1;min-width:0;}
+.al-name{font-size:14px;font-weight:600;margin-bottom:3px;}
+.al-detail{font-size:12px;color:var(--mu);line-height:1.5;}
+.al-actions{display:flex;gap:8px;flex-shrink:0;}
+.al-empty{text-align:center;padding:48px 24px;color:var(--mu);}
+.al-empty-icon{font-size:32px;margin-bottom:12px;}
+.al-empty-title{font-size:16px;font-weight:600;color:var(--tx);margin-bottom:6px;}
+.al-empty-sub{font-size:13px;}
+@media(max-width:900px){.sg,.dc2{grid-template-columns:1fr 1fr;}.mgrid,.dpg,.stg,.fg,.wan{grid-template-columns:1fr;}aside{width:200px;min-width:200px;}.pg{padding:20px 18px 32px;}}
+@media(max-width:700px){.sg,.mgrid,.dpg,.stg{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="app">
+<aside>
+  <div class="logo">
+    <div class="logo-ic"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c0-5.5-5-9-5-9s5-4 10 0c0 0-3.5 5.5-5 9z"/><line x1="12" y1="13" x2="12" y2="22"/></svg></div>
+    <div><div class="logo-n">GreenPlate</div><div class="logo-s">Dynamic Pricing</div></div>
+  </div>
+  <nav>
+    <button class="ni active" onclick="go('dashboard',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
+    <button class="ni" onclick="go('alerts',this)" id="nav-al"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>Alerts</button>
+    <button class="ni" onclick="go('inventory',this)" id="nav-inv"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/></svg>Inventory</button>
+    <button class="ni" onclick="go('menu',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>Menu</button>
+    <button class="ni" onclick="go('dynamic',this)" id="nav-dp"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><polyline points="23,18 13.5,8.5 8.5,13.5 1,6"/><polyline points="17,18 23,18 23,12"/></svg>Dynamic Pricing</button>
+    <button class="ni" onclick="go('staff',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Staff Board</button>
+    <button class="ni" onclick="go('waste',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg>Waste Log</button>
+  </nav>
+  <div class="sb-ft"><button class="ni" onclick="T('Sign out not available in prototype')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sign Out</button></div>
+</aside>
+<main>
+  <div class="pg" id="p-alerts">
+    <div class="ph"><div><h1>Alerts</h1><p>Everything that needs your attention today, in one place.</p></div></div>
+    <div id="alerts-body"></div>
+  </div>
+  <div class="pg on" id="p-dashboard">
+    <div class="ph"><div><h1>Dashboard</h1><p>Monitor your restaurant's sustainability and dynamic pricing at a glance.</p></div></div>
+    <div class="sg">
+      <div class="sc"><div><div class="sc-lb">Total Ingredients</div><div class="sc-v" id="d-i">0</div><div class="sc-s" id="d-is"></div></div><div class="sc-ic"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M12 3v18M3 8l9 5 9-5"/></svg></div></div>
+      <div class="sc"><div><div class="sc-lb">Active Promotions</div><div class="sc-v" id="d-p">0</div><div class="sc-s">of <span id="d-m">0</span> dishes</div></div><div class="sc-ic"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><polyline points="23,18 13.5,8.5 8.5,13.5 1,6"/><polyline points="17,18 23,18 23,12"/></svg></div></div>
+      <div class="sc"><div><div class="sc-lb">Pending Suggestions</div><div class="sc-v" id="d-su">0</div><div class="sc-s">dishes with advice, no deal</div></div><div class="sc-ic"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V17a1 1 0 001 1h6a1 1 0 001-1v-2.26A7 7 0 0012 2z"/></svg></div></div>
+      <div class="sc"><div><div class="sc-lb">Total Waste Cost</div><div class="sc-v" id="d-w">0</div><div class="sc-s" id="d-ws"></div></div><div class="sc-ic"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.6"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg></div></div>
+    </div>
+    <div class="dc2">
+      <div><div class="sh">Expiring Within 2 Days</div><div class="card" id="d-exp"></div></div>
+      <div><div class="sh">Promoted Today</div><div class="card" id="d-pro"></div></div>
+    </div>
+  </div>
+  <div class="pg" id="p-inventory">
+    <div class="ph"><div><h1>Inventory</h1><p>Manage your ingredient stock levels and expiry dates.</p></div><button class="btn btn-p" onclick="openIM(null)">+ Add Ingredient</button></div>
+    <div class="fr">
+      <div class="sr"><span class="sr-i"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><input type="text" id="inv-q" placeholder="Search ingredients..." oninput="rInv()"></div>
+      <select id="inv-c" style="width:150px" onchange="rInv()"><option value="">All Categories</option><option>Dairy</option><option>Herbs &amp; Spices</option><option>Meat</option><option>Vegetables</option><option>Grains</option><option>Fish</option><option>Other</option></select>
+      <select id="inv-s" style="width:190px" onchange="rInv()"><option value="exp">Sort: Expiry (urgent first)</option><option value="fresh">Sort: Freshness (lowest first)</option><option value="name">Sort: Name A-Z</option><option value="stock">Sort: Stock (lowest first)</option></select>
+    </div>
+    <div class="tw"><table><thead><tr><th>Name</th><th>Category</th><th>Stock</th><th>Cost/Unit</th><th>Expiry</th><th>Freshness</th><th>Used in dishes</th><th style="text-align:right">Actions</th></tr></thead><tbody id="inv-b"></tbody></table></div>
+  </div>
+  <div class="pg" id="p-menu">
+    <div class="ph"><div><h1>Menu</h1><p>Manage your dishes and set base prices.</p></div><button class="btn btn-p" onclick="openDM(null)">+ Add Dish</button></div>
+    <div class="fr">
+      <div class="sr"><span class="sr-i"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span><input type="text" id="menu-q" placeholder="Search dishes..." oninput="rMenu()"></div>
+      <div style="display:flex;gap:6px" id="menu-tabs"><button class="btn-tab on" onclick="setCat('',this)">All</button><button class="btn-tab" onclick="setCat('Starter',this)">Starter</button><button class="btn-tab" onclick="setCat('Main Course',this)">Main Course</button><button class="btn-tab" onclick="setCat('Dessert',this)">Dessert</button></div>
+    </div>
+    <div id="menu-b"></div>
+  </div>
+  <div class="pg" id="p-dynamic">
+    <div class="ph"><div><h1>Dynamic Pricing</h1><p>AI-powered discount advice based on freshness, expiry, waste history and stock levels.</p></div><button class="btn btn-p" onclick="autoAll()">&#9889; Auto-Apply All Suggestions</button></div>
+    <div class="dp-inf"><div class="dp-inf-t"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>How the advice engine works</div><div class="dp-inf-b">Each dish is scored using four factors: <strong>days until expiry</strong> of its worst-case ingredient, <strong>freshness rating</strong> (1-10), <strong>waste history</strong> (only counted when urgency already exists), and <strong>stock level</strong>. Scores determine the recommended discount. Dishes with all-fresh ingredients receive no recommendation.</div></div>
+    <div class="dpg" id="dp-b"></div>
+  </div>
+  <div class="pg" id="p-staff">
+    <div class="ph"><div><h1>Staff Board</h1><p>Daily briefing — which dishes are discounted and why.</p></div></div>
+    <div class="sb2"><div class="sb2-h"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M22 17H2a3 3 0 000 6h20a3 3 0 000-6zM5 17V5a2 2 0 012-2h10a2 2 0 012 2v12"/></svg>Today's Discounted Dishes</div><div class="sb2-s">These dishes have an active price reduction. The ingredient details below explain why.</div><div class="stg" id="staff-b"></div></div>
+    <div class="sb2"><div class="sb2-h"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Ingredients to Watch</div><div class="sb2-s">Expiring within 2 days — make sure they are used in service today or tomorrow.</div><div class="tw"><table><thead><tr><th>Ingredient</th><th>Stock</th><th>Expiry</th><th>Freshness</th><th>Linked dishes</th><th>Discount active</th></tr></thead><tbody id="staff-w"></tbody></table></div></div>
+  </div>
+  <div class="pg" id="p-waste">
+    <div class="ph"><div><h1>Waste Log</h1><p>Track and analyze food waste to identify patterns.</p></div><button class="btn btn-p" onclick="openWM(null)">+ Log Waste</button></div>
+    <div class="wstats"><div class="wsc"><div class="wsc-l">Total Waste Entries</div><div class="wsc-v" id="w-c">0</div></div><div class="wsc"><div class="wsc-l">Total Cost Lost</div><div class="wsc-v red" id="w-t">0</div></div></div>
+    <div class="wan"><div class="wan-box"><div class="wan-title">Waste by Reason</div><div id="wan-r"></div></div><div class="wan-box"><div class="wan-title">Top Wasted Ingredients</div><div id="wan-i"></div></div></div>
+    <div class="tw"><table><thead><tr><th>Date</th><th>Ingredient</th><th>Quantity</th><th>Reason</th><th>Cost Lost</th><th>Notes</th><th style="text-align:right">Actions</th></tr></thead><tbody id="waste-b"></tbody></table></div>
+  </div>
+</main>
+</div>
+<div class="mw" id="m-ingr"><div class="modal">
+  <h2 id="ingr-ti">Add Ingredient</h2><div class="msub" id="ingr-su"></div>
+  <div class="fg">
+    <div class="fl"><label>Name</label><input type="text" id="ingr-na" placeholder="e.g. Cherry tomatoes"></div>
+    <div class="fl"><label>Category</label><select id="ingr-ca"><option>Dairy</option><option>Herbs &amp; Spices</option><option>Meat</option><option>Vegetables</option><option>Grains</option><option>Fish</option><option>Other</option></select></div>
+    <div class="fl"><label>Stock amount</label><input type="number" id="ingr-st" value="5" min="0" step="0.5"></div>
+    <div class="fl"><label>Unit</label><select id="ingr-un"><option>kg</option><option>pieces</option><option>litres</option><option>portions</option></select></div>
+    <div class="fl"><label>Cost per unit (€)</label><input type="number" id="ingr-co" value="3.00" min="0" step="0.50"></div>
+    <div class="fl"><label>Expiry date</label><input type="date" id="ingr-ex"></div>
+    <div class="fl"><label>Min. stock (low-stock alert threshold)</label><input type="number" id="ingr-mn" value="1" min="0" step="0.1"></div>
+  </div>
+  <div class="fl"><label>Freshness (1 = poor, 10 = perfect)</label>
+    <div style="display:flex;align-items:center;gap:12px;margin-top:4px"><input type="range" min="1" max="10" value="8" id="ingr-fr" style="flex:1" oninput="document.getElementById('ingr-fv').textContent=this.value"><span style="font-size:18px;font-weight:600;color:var(--gn);min-width:36px;text-align:center" id="ingr-fv">8</span></div>
+  </div>
+  <div class="ma"><button class="btn" onclick="closeM('m-ingr')">Cancel</button><button class="btn btn-p" id="ingr-sb" onclick="saveI()">Add Ingredient</button></div>
+</div></div>
+<div class="mw" id="m-dish"><div class="modal wide">
+  <h2 id="dish-ti">Add Dish</h2><div class="msub" id="dish-su"></div>
+  <div class="fg">
+    <div class="fl"><label>Dish name</label><input type="text" id="dish-na" placeholder="e.g. Grilled sea bass"></div>
+    <div class="fl"><label>Category</label><select id="dish-ca"><option>Starter</option><option>Main Course</option><option>Dessert</option></select></div>
+    <div class="fl"><label>Base price (€)</label><input type="number" id="dish-pr" value="14.00" min="0" step="0.50"></div>
+  </div>
+  <div class="fl"><label>Description</label><textarea id="dish-de" placeholder="Short description..."></textarea></div>
+  <div class="fl"><label>Linked Ingredients</label><div class="ic-wrap" id="dish-ic"></div></div>
+  <div class="ma"><button class="btn" onclick="closeM('m-dish')">Cancel</button><button class="btn btn-p" id="dish-sb" onclick="saveD()">Add Dish</button></div>
+</div></div>
+<div class="mw" id="m-adj"><div class="modal">
+  <h2 id="adj-na">Adjust Price</h2><div class="msub" id="adj-su"></div>
+  <div id="adj-av" class="aj-av none"><div class="aj-av-t none" id="adj-at">No recommendation</div><div class="aj-av-r" id="adj-ar"></div></div>
+  <div class="fl"><label>Discount percentage</label>
+    <div class="db" id="adj-pc">15%</div>
+    <input type="range" id="adj-sl" min="5" max="40" step="5" value="15" oninput="updAdj(this.value)">
+    <div class="rl2"><span>5%</span><span>20%</span><span>40%</span></div>
+  </div>
+  <div class="pp"><div class="pp-l">Price preview</div><div class="pp-r"><span class="pp-n" id="adj-pn">0</span><span class="pp-w" id="adj-pw">0</span></div><div class="pp-m" id="adj-pm"></div></div>
+  <div class="ma"><button class="btn" onclick="closeM('m-adj')">Cancel</button><button class="btn btn-p" onclick="saveAdj()">Activate Deal</button></div>
+</div></div>
+<div class="mw" id="m-waste"><div class="modal">
+  <h2 id="waste-ti">Log Waste</h2><div class="msub" id="waste-su"></div>
+  <div class="fg">
+    <div class="fl"><label>Ingredient</label><input type="text" id="waste-in" placeholder="Type ingredient name..." list="wdl" oninput="updDeduct()"><datalist id="wdl"></datalist></div>
+    <div class="fl"><label>Date</label><input type="date" id="waste-dt"></div>
+    <div class="fl"><label>Quantity</label><input type="number" id="waste-qt" value="1" min="0" step="0.1" oninput="updDeduct()"></div>
+    <div class="fl"><label>Unit</label><select id="waste-un" onchange="updDeduct()"><option>kg</option><option>pieces</option><option>litres</option><option>portions</option></select></div>
+    <div class="fl"><label>Cost lost (€)</label><input type="number" id="waste-co" value="0.00" min="0" step="0.50"></div>
+    <div class="fl"><label>Reason</label><select id="waste-re"><option>Expired</option><option>Overproduction</option><option>Preparation Waste</option><option>Customer Return</option><option>Other</option></select></div>
+  </div>
+  <div class="fl"><label>Notes (optional)</label><textarea id="waste-no" placeholder="Any additional context..."></textarea></div>
+  <div class="deduct-box" id="deduct-box">
+    <label class="deduct-lbl"><input type="checkbox" id="deduct-cb"> Deduct this amount from inventory stock</label>
+    <div class="deduct-prev" id="deduct-prev"></div>
+  </div>
+  <div class="ma"><button class="btn" onclick="closeM('m-waste')">Cancel</button><button class="btn btn-p" id="waste-sb" onclick="saveW()">Log Waste</button></div>
+</div></div>
+<div id="toast"></div>
+<script>
+const TODAY=new Date('2026-05-04');
+function tStr(){return TODAY.toISOString().split('T')[0];}
+let IN=[
+  {id:1,name:'Parmesan',cat:'Dairy',stock:6,unit:'kg',cost:14.00,exp:'2026-06-01',fresh:10,min:1.5},
+  {id:2,name:'Heavy Cream',cat:'Dairy',stock:8,unit:'litres',cost:2.80,exp:'2026-05-12',fresh:9,min:2},
+  {id:3,name:'Cheddar',cat:'Dairy',stock:5,unit:'kg',cost:9.50,exp:'2026-05-18',fresh:9,min:1},
+  {id:4,name:'Butter',cat:'Dairy',stock:4,unit:'kg',cost:6.00,exp:'2026-05-28',fresh:10,min:1},
+  {id:5,name:'Chicken Breast',cat:'Meat',stock:18,unit:'kg',cost:9.00,exp:'2026-05-08',fresh:9,min:5},
+  {id:6,name:'Beef Tenderloin',cat:'Meat',stock:10,unit:'kg',cost:28.00,exp:'2026-05-10',fresh:9,min:3},
+  {id:7,name:'Pork Belly',cat:'Meat',stock:8,unit:'kg',cost:11.00,exp:'2026-05-07',fresh:8,min:2},
+  {id:8,name:'Duck Breast',cat:'Meat',stock:6,unit:'kg',cost:18.00,exp:'2026-05-09',fresh:9,min:2},
+  {id:9,name:'Pasta',cat:'Grains',stock:25,unit:'kg',cost:1.80,exp:'2026-08-15',fresh:10,min:5},
+  {id:10,name:'Arborio Rice',cat:'Grains',stock:15,unit:'kg',cost:2.40,exp:'2026-09-01',fresh:10,min:3},
+  {id:11,name:'Breadcrumbs',cat:'Grains',stock:8,unit:'kg',cost:1.20,exp:'2026-07-20',fresh:10,min:2},
+  {id:12,name:'Flour',cat:'Grains',stock:20,unit:'kg',cost:0.90,exp:'2026-10-01',fresh:10,min:4},
+  {id:13,name:'Bell Peppers',cat:'Vegetables',stock:10,unit:'kg',cost:3.20,exp:'2026-05-10',fresh:9,min:2},
+  {id:14,name:'Onions',cat:'Vegetables',stock:18,unit:'kg',cost:1.50,exp:'2026-05-22',fresh:10,min:3},
+  {id:15,name:'Garlic',cat:'Herbs & Spices',stock:4,unit:'kg',cost:4.00,exp:'2026-05-30',fresh:10,min:0.5},
+  {id:16,name:'Rosemary',cat:'Herbs & Spices',stock:0.15,unit:'kg',cost:8.00,exp:'2026-05-09',fresh:8,min:0.2},
+  {id:17,name:'Thyme',cat:'Herbs & Spices',stock:0.15,unit:'kg',cost:7.50,exp:'2026-05-11',fresh:9,min:0.2},
+  {id:18,name:'Cod Fillet',cat:'Fish',stock:7,unit:'kg',cost:14.00,exp:'2026-05-09',fresh:8,min:2},
+  {id:19,name:'Shrimp',cat:'Fish',stock:1.2,unit:'kg',cost:16.00,exp:'2026-05-08',fresh:8,min:1.5},
+  {id:20,name:'Asparagus',cat:'Vegetables',stock:6,unit:'kg',cost:6.50,exp:'2026-05-08',fresh:8,min:1.5},
+  {id:21,name:'Mozzarella',cat:'Dairy',stock:3,unit:'kg',cost:8.50,exp:'2026-05-05',fresh:5,min:1},
+  {id:22,name:'Mixed Lettuce',cat:'Vegetables',stock:2,unit:'kg',cost:4.00,exp:'2026-05-04',fresh:3,min:0.5},
+  {id:23,name:'Salmon Fillet',cat:'Fish',stock:6,unit:'kg',cost:18.00,exp:'2026-05-06',fresh:7,min:2},
+  {id:24,name:'Tomatoes',cat:'Vegetables',stock:9,unit:'kg',cost:2.50,exp:'2026-05-06',fresh:6,min:2},
+  {id:25,name:'Fresh Basil',cat:'Herbs & Spices',stock:1.5,unit:'kg',cost:12.00,exp:'2026-05-05',fresh:6,min:0.3},
+  {id:26,name:'Mushrooms',cat:'Vegetables',stock:6,unit:'kg',cost:5.50,exp:'2026-05-11',fresh:9,min:1.5},
+  {id:27,name:'Lemons',cat:'Vegetables',stock:10,unit:'pieces',cost:0.60,exp:'2026-05-16',fresh:9,min:3},
+  {id:28,name:'Mascarpone',cat:'Dairy',stock:4,unit:'kg',cost:9.00,exp:'2026-05-14',fresh:9,min:0.5},
+  {id:29,name:'Olive Oil',cat:'Other',stock:6,unit:'litres',cost:8.00,exp:'2026-09-01',fresh:10,min:1},
+  {id:30,name:'Oranges',cat:'Vegetables',stock:10,unit:'pieces',cost:0.70,exp:'2026-05-12',fresh:9,min:3},
+  {id:31,name:'Apples',cat:'Vegetables',stock:8,unit:'pieces',cost:0.50,exp:'2026-05-15',fresh:9,min:2},
+  {id:32,name:'Eggs',cat:'Dairy',stock:36,unit:'pieces',cost:0.35,exp:'2026-05-13',fresh:9,min:6},
+  {id:33,name:'Ladyfingers',cat:'Grains',stock:2,unit:'kg',cost:6.50,exp:'2026-07-15',fresh:10,min:0.5},
+  {id:34,name:'Apple Puree',cat:'Other',stock:3,unit:'kg',cost:4.20,exp:'2026-06-01',fresh:10,min:0.5},
+  {id:35,name:'Truffle Oil',cat:'Other',stock:0.5,unit:'litres',cost:28.00,exp:'2027-01-01',fresh:10,min:0.1},
+  {id:36,name:'Marie Rose Sauce',cat:'Other',stock:1.5,unit:'kg',cost:5.80,exp:'2026-05-18',fresh:9,min:0.4},
+  {id:37,name:'Caesar Dressing',cat:'Other',stock:2,unit:'litres',cost:7.20,exp:'2026-05-21',fresh:9,min:0.5},
+];
+let DS=[
+  {id:1,name:'Caprese Salad',cat:'Starter',desc:'Buffalo mozzarella with vine tomatoes, fresh basil and extra virgin olive oil',price:13.50,iids:[21,24,15,25,29],disc:20},
+  {id:2,name:'Caesar Salad',cat:'Starter',desc:'Crispy romaine with shaved parmesan, croutons and house Caesar dressing',price:11.00,iids:[22,1,11,37],disc:15},
+  {id:3,name:'Bruschetta',cat:'Starter',desc:'Toasted sourdough with diced tomatoes, garlic and fresh basil oil',price:9.00,iids:[24,15,25,29],disc:0},
+  {id:4,name:'Shrimp Cocktail',cat:'Starter',desc:'Chilled tiger shrimp with marie rose sauce and lemon wedge',price:14.00,iids:[19,22,27,36],disc:0},
+  {id:5,name:'Grilled Salmon',cat:'Main Course',desc:'Pan-seared Atlantic salmon with asparagus and lemon butter sauce',price:24.00,iids:[23,20,4,17,27],disc:10},
+  {id:6,name:'Cod & Chips',cat:'Main Course',desc:'Crispy beer-battered cod with hand-cut fries and mushy peas',price:18.00,iids:[18,12,11,4],disc:0},
+  {id:7,name:'Beef Tenderloin',cat:'Main Course',desc:'200g grass-fed beef tenderloin with roasted vegetables and red wine jus',price:34.00,iids:[6,20,4,15,16,14,17,13],disc:0},
+  {id:8,name:'Chicken Parmesan',cat:'Main Course',desc:'Breaded chicken breast with tomato sauce, mozzarella and parmesan',price:21.00,iids:[5,21,1,24,11,15,14],disc:0},
+  {id:9,name:'Pork Belly',cat:'Main Course',desc:'Slow-roasted pork belly with apple puree and bell peppers',price:23.00,iids:[7,13,15,17,14,34],disc:0},
+  {id:10,name:'Duck a l Orange',cat:'Main Course',desc:'Roasted duck breast with orange reduction and seasonal vegetables',price:28.00,iids:[8,14,4,17,15,30,13],disc:0},
+  {id:11,name:'Mushroom Risotto',cat:'Main Course',desc:'Creamy arborio rice with wild mushrooms, parmesan and white truffle oil',price:18.00,iids:[10,1,26,14,4,2,35],disc:0},
+  {id:12,name:'Shrimp Linguine',cat:'Main Course',desc:'Fresh pasta with tiger shrimp, garlic, cherry tomatoes and white wine',price:22.00,iids:[9,19,15,24,14],disc:0},
+  {id:13,name:'Tiramisu',cat:'Dessert',desc:'Classic Italian dessert with espresso-soaked ladyfingers and mascarpone',price:8.50,iids:[2,28,32,33],disc:0},
+  {id:14,name:'Panna Cotta',cat:'Dessert',desc:'Vanilla cream dessert with mixed berry coulis',price:7.50,iids:[2,28],disc:0},
+  {id:15,name:'Creme Brulee',cat:'Dessert',desc:'Classic French vanilla custard with caramelised sugar crust',price:8.00,iids:[2,4,32],disc:0},
+];
+let WL=[
+  {id:1,date:'2026-04-14',ingr:'Cherry Tomatoes',qty:2,unit:'kg',reason:'Overproduction',cost:5.00,notes:'Unused garnish from weekend banquet'},
+  {id:2,date:'2026-04-16',ingr:'Fresh Basil',qty:0.3,unit:'kg',reason:'Expired',cost:3.60,notes:''},
+  {id:3,date:'2026-04-17',ingr:'Heavy Cream',qty:1,unit:'litres',reason:'Expired',cost:2.80,notes:'Opened but not fully used'},
+  {id:4,date:'2026-04-19',ingr:'Salmon Fillet',qty:0.8,unit:'kg',reason:'Preparation Waste',cost:14.40,notes:'Trimming from portioning'},
+  {id:5,date:'2026-04-21',ingr:'Mixed Lettuce',qty:1.2,unit:'kg',reason:'Overproduction',cost:4.80,notes:'Monday was quiet'},
+  {id:6,date:'2026-04-22',ingr:'Asparagus',qty:0.6,unit:'kg',reason:'Preparation Waste',cost:3.90,notes:'Woody ends discarded'},
+  {id:7,date:'2026-04-24',ingr:'Chicken Breast',qty:1.2,unit:'kg',reason:'Customer Return',cost:10.80,notes:'Table complained about temperature'},
+  {id:8,date:'2026-04-25',ingr:'Bread Rolls',qty:14,unit:'pieces',reason:'Overproduction',cost:4.20,notes:'Lunch service overestimated'},
+  {id:9,date:'2026-04-27',ingr:'Pork Belly',qty:0.5,unit:'kg',reason:'Preparation Waste',cost:5.50,notes:'Trimming loss during portioning'},
+  {id:10,date:'2026-04-28',ingr:'Tomatoes',qty:1.5,unit:'kg',reason:'Expired',cost:3.75,notes:'Not used in time after delivery'},
+  {id:11,date:'2026-04-30',ingr:'Mozzarella',qty:0.6,unit:'kg',reason:'Expired',cost:5.10,notes:''},
+  {id:12,date:'2026-05-01',ingr:'Salmon Fillet',qty:0.5,unit:'kg',reason:'Preparation Waste',cost:9.00,notes:'Skin and pin-bone trimming'},
+  {id:13,date:'2026-05-02',ingr:'Mixed Lettuce',qty:1.5,unit:'kg',reason:'Overproduction',cost:6.00,notes:'Prepared too much for lunch service'},
+  {id:14,date:'2026-05-02',ingr:'Heavy Cream',qty:0.5,unit:'litres',reason:'Expired',cost:1.40,notes:'Leftover from sauce prep'},
+  {id:15,date:'2026-05-03',ingr:'Chicken Breast',qty:0.8,unit:'kg',reason:'Customer Return',cost:7.20,notes:''},
+  {id:16,date:'2026-05-03',ingr:'Tomatoes',qty:2,unit:'kg',reason:'Overproduction',cost:5.00,notes:'Surplus from bruschetta prep'},
+  {id:17,date:'2026-05-03',ingr:'Bell Peppers',qty:0.8,unit:'kg',reason:'Preparation Waste',cost:2.56,notes:'Off-cuts from tapas board'},
+];
+let nid={i:45,d:20,w:30},eII=null,eDI=null,eWI=null,adjId=null,menuCatF='';
+function dL(s){return Math.floor((new Date(s)-TODAY)/86400000);}
+function eB(s){const d=dL(s),f=new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short'});if(d<0)return`<span class="badge b-rd">${f} (expired)</span>`;if(d===0)return`<span class="badge b-rd">${f} (today)</span>`;if(d===1)return`<span class="badge b-rd">${f} (tomorrow)</span>`;if(d<=3)return`<span class="badge b-am">${f} (${d}d)</span>`;return`<span class="badge b-gy">${f} (${d}d)</span>`;}
+function fB(f){const c=f<=3?'var(--rd)':f<=6?'var(--am)':'var(--gn)';return`<div class="fb"><div class="fb-t"><div class="fb-f" style="width:${f*10}%;background:${c}"></div></div><span style="font-size:12px;color:var(--mu);min-width:30px">${f}/10</span></div>`;}
+function dp(d){return(d.price*(1-d.disc/100)).toFixed(2);}
+function gI(id){return IN.find(i=>i.id===id);}
+function rC(r){if(r==='Expired')return'b-rd';if(r==='Overproduction')return'b-am';if(r==='Customer Return')return'b-bl';return'b-gy';}
+function usedIn(id){return DS.filter(d=>d.iids.includes(id));}
+function T(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.mw').forEach(w=>w.addEventListener('click',e=>{if(e.target===w)w.classList.remove('open');}));
+function sSel(id,val){const el=document.getElementById(id);[...el.options].forEach(o=>o.selected=(o.value===val||o.text===val));}
+function nav2(p){const b=document.querySelector('.ni[onclick*="\''+p+'\'"]');if(b)go(p,b);}
+function advice(dish){
+  if(!dish.iids.length)return{pct:0,level:'none',reasons:['No ingredients linked'],ingr:null,score:0};
+  let best={score:-1,pct:0,level:'none',reasons:[],ingr:null};
+  dish.iids.forEach(id=>{
+    const i=gI(id);if(!i)return;
+    let sc=0,rs=[];
+    const d=dL(i.exp);
+    if(d<=0){sc+=40;rs.push('Expires today');}
+    else if(d===1){sc+=28;rs.push('Expires tomorrow');}
+    else if(d===2){sc+=16;rs.push('Expires in 2 days');}
+    else if(d===3){sc+=8;rs.push('Expires in 3 days');}
+    if(i.fresh<=3){sc+=18;rs.push('Very low freshness ('+i.fresh+'/10)');}
+    else if(i.fresh<=5){sc+=9;rs.push('Below average freshness ('+i.fresh+'/10)');}
+    else if(i.fresh<=7){sc+=2;rs.push('Moderate freshness ('+i.fresh+'/10)');}
+    if(d<=3||i.fresh<=7){const w=WL.filter(w=>w.ingr.toLowerCase().includes(i.name.split(' ')[0].toLowerCase()));if(w.length>=3){sc+=12;rs.push('Wasted '+w.length+'x recently');}else if(w.length>=1){sc+=6;rs.push('Wasted '+w.length+'x recently');}}
+    if(i.stock<i.min&&i.stock>0){sc+=5;rs.push('Low stock level');}
+    if(sc>best.score){best.score=sc;best.ingr=i;best.reasons=rs.slice(0,3);if(sc>=55){best.pct=35;best.level='high';}else if(sc>=40){best.pct=30;best.level='high';}else if(sc>=30){best.pct=25;best.level='high';}else if(sc>=20){best.pct=20;best.level='medium';}else if(sc>=12){best.pct=15;best.level='medium';}else if(sc>=6){best.pct=10;best.level='low';}else{best.pct=0;best.level='none';}}
+  });
+  return best;
+}
+function avHTML(av){
+  if(av.level==='none')return'<div class="av none"><div class="av-rec none">No discount recommended<span style="font-size:11px">All ingredients are fresh</span></div><ul class="av-list"><li class="none">No urgent ingredients linked</li></ul></div>';
+  const em=av.level==='high'?'🔴':av.level==='medium'?'🟠':'🟢';
+  return'<div class="av '+av.level+'"><div class="av-rec '+av.level+'">'+em+' Recommended: '+av.pct+'%'+(av.ingr?' — '+av.ingr.name:'')+' <span style="font-size:11px;font-weight:400">score '+av.score+'</span></div><ul class="av-list">'+av.reasons.map(r=>'<li class="'+av.level+'">'+r+'</li>').join('')+'</ul></div>';
+}
+function go(p,btn){document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));document.getElementById('p-'+p).classList.add('on');btn.classList.add('active');document.querySelector('main').scrollTop=0;rAll();}
+function rAll(){rAlerts();rDash();rInv();rMenu();rDyn();rStaff();rWaste();updNavB();}
+function totalAlerts(){return IN.filter(i=>dL(i.exp)<=1).length+IN.filter(i=>i.stock<i.min).length+DS.filter(d=>advice(d).pct>0&&d.disc===0).length;}
+function updNavB(){
+  const ar=IN.filter(i=>dL(i.exp)<=2).length;
+  const pd=DS.filter(d=>advice(d).pct>0&&d.disc===0).length;
+  const total=totalAlerts();
+  const ni=document.getElementById('nav-inv');const nd=document.getElementById('nav-dp');const na=document.getElementById('nav-al');
+  ni.querySelectorAll('.nb').forEach(x=>x.remove());nd.querySelectorAll('.nb').forEach(x=>x.remove());if(na)na.querySelectorAll('.nb').forEach(x=>x.remove());
+  if(ar>0)ni.insertAdjacentHTML('beforeend','<span class="nb">'+ar+'</span>');
+  if(pd>0)nd.insertAdjacentHTML('beforeend','<span class="nb">'+pd+'</span>');
+  if(na&&total>0){na.insertAdjacentHTML('beforeend','<span class="nb">'+total+'</span>');}
+}
+function rAlerts(){
+  const b=document.getElementById('alerts-body');if(!b)return;
+  const expired    =IN.filter(i=>dL(i.exp)<0);
+  const expToday   =IN.filter(i=>dL(i.exp)===0);
+  const expTomorrow=IN.filter(i=>dL(i.exp)===1);
+  const lowStk     =IN.filter(i=>i.stock<i.min&&dL(i.exp)>=0);
+  const pending    =DS.filter(d=>advice(d).pct>0&&d.disc===0);
+  const total=expired.length+expToday.length+expTomorrow.length+lowStk.length+pending.length;
+  if(!total){b.innerHTML='<div class="al-empty"><div class="al-empty-icon">✅</div><div class="al-empty-title">No alerts right now</div><div class="al-empty-sub">All ingredients are fresh, stock levels are healthy and all suggested deals are active.</div></div>';return;}
+  let html='';
+  if(expired.length){
+    html+='<div class="al-section"><div class="al-section-head"><span class="al-count red">'+expired.length+'</span><span class="al-section-title red">Expired — remove from service immediately</span></div>';
+    html+=expired.map(i=>{const dishes=usedIn(i.id);return'<div class="al-card al-rd"><div class="al-left"><div class="al-name">'+i.name+'</div><div class="al-detail">'+i.stock+' '+i.unit+' in stock &mdash; expired '+Math.abs(dL(i.exp))+'d ago'+(dishes.length?' &mdash; linked dishes: '+dishes.map(d=>d.name).join(', '):'')+'</div></div><div class="al-actions"><button class="btn btn-sm" onclick="go(\'inventory\',document.querySelector(\'.ni[onclick*=\\\'inventory\\\']\'))">View inventory</button></div></div>';}).join('');
+    html+='</div>';
+  }
+  if(expToday.length||expTomorrow.length){
+    const urgent=[...expToday,...expTomorrow];
+    html+='<div class="al-section"><div class="al-section-head"><span class="al-count amber">'+urgent.length+'</span><span class="al-section-title amber">Expiring today or tomorrow — use in service or set a deal</span></div>';
+    html+=urgent.map(i=>{
+      const dishes=usedIn(i.id);
+      const hasDeal=dishes.some(d=>d.disc>0);
+      const needDeal=dishes.filter(d=>d.disc===0&&advice(d).pct>0);
+      return'<div class="al-card al-am"><div class="al-left"><div class="al-name">'+i.name+' &mdash; '+eB(i.exp)+'</div><div class="al-detail">'+i.stock+' '+i.unit+' remaining &mdash; freshness '+i.fresh+'/10'+(dishes.length?' &mdash; used in: '+dishes.map(d=>'<button class="lnk" onclick="openDM('+d.id+')">'+d.name+'</button>').join(', '):'')+'</div>'+(hasDeal?'<div style="margin-top:5px"><span class="badge b-gn">Active deal on linked dish</span></div>':'')+'</div><div class="al-actions">'+(needDeal.length?'<button class="btn btn-sm btn-p" onclick="startAdj('+needDeal[0].id+')">Set deal</button>':'')+'<button class="btn btn-sm" onclick="openIM('+i.id+')">Edit</button></div></div>';
+    }).join('');
+    html+='</div>';
+  }
+  if(lowStk.length){
+    html+='<div class="al-section"><div class="al-section-head"><span class="al-count blue">'+lowStk.length+'</span><span class="al-section-title blue">Low stock — consider reordering</span></div>';
+    html+=lowStk.map(i=>{
+      const pct=Math.round((i.stock/i.min)*100);
+      return'<div class="al-card al-bl"><div class="al-left"><div class="al-name">'+i.name+'</div><div class="al-detail">'+i.stock+' '+i.unit+' in stock &mdash; reorder point: '+i.min+' '+i.unit+' &mdash; at '+pct+'% of minimum</div><div style="margin-top:7px;display:flex;align-items:center;gap:8px"><div style="width:140px;height:5px;background:var(--ll);border-radius:3px;overflow:hidden"><div style="width:'+Math.min(pct,100)+'%;height:100%;background:var(--bl);border-radius:3px"></div></div><span style="font-size:11px;color:var(--bl);font-weight:500">'+pct+'% of min</span></div></div><div class="al-actions"><button class="btn btn-sm" onclick="openIM('+i.id+')">Update stock</button></div></div>';
+    }).join('');
+    html+='</div>';
+  }
+  if(pending.length){
+    html+='<div class="al-section"><div class="al-section-head"><span class="al-count green">'+pending.length+'</span><span class="al-section-title green">Recommended deals not yet activated</span></div>';
+    html+=pending.map(d=>{const av=advice(d);return'<div class="al-card al-gn"><div class="al-left"><div class="al-name">'+d.name+'</div><div class="al-detail">'+av.pct+'% discount recommended'+(av.ingr?' — '+av.ingr.name+': '+av.reasons[0]:'')+'</div></div><div class="al-actions"><button class="btn btn-sm btn-p" onclick="startAdj('+d.id+')">Set deal now</button></div></div>';}).join('');
+    html+='</div>';
+  }
+  b.innerHTML=html;
+}
+function rDash(){
+  const ac=DS.filter(d=>d.disc>0),ar=IN.filter(i=>dL(i.exp)<=2),wT=WL.reduce((a,w)=>a+w.cost,0),pd=DS.filter(d=>advice(d).pct>0&&d.disc===0).length;
+  document.getElementById('d-i').textContent=IN.length;document.getElementById('d-is').textContent=IN.filter(i=>i.stock<i.min).length+' low stock';
+  document.getElementById('d-m').textContent=DS.length;document.getElementById('d-p').textContent=ac.length;
+  document.getElementById('d-su').textContent=pd;document.getElementById('d-w').textContent='€'+wT.toFixed(2);
+  document.getElementById('d-ws').textContent=WL.length+' waste entries';
+  const eEl=document.getElementById('d-exp');
+  eEl.innerHTML=ar.length?ar.sort((a,b)=>dL(a.exp)-dL(b.exp)).map(i=>'<div class="dli"><div><div style="font-size:14px;font-weight:500">'+i.name+'</div><div style="font-size:12px;color:var(--mu)">'+i.stock+' '+i.unit+' remaining, freshness '+i.fresh+'/10 &mdash; <button class="lnk" onclick="nav2(\'inventory\')">view in inventory</button></div></div>'+eB(i.exp)+'</div>').join(''):'<p style="color:var(--mu);font-size:13px;padding:6px 0">No items expiring within 2 days.</p>';
+  const pEl=document.getElementById('d-pro');
+  pEl.innerHTML=ac.length?ac.map(d=>{const av=advice(d);return'<div class="dli"><div><div style="font-size:14px;font-weight:500">'+d.name+'</div><div style="font-size:12px;color:var(--mu);margin-top:2px">'+(av.ingr?av.ingr.name+' needs attention':'')+'</div></div><div style="text-align:right"><div style="font-size:12px;color:var(--gn);font-weight:600">↓ '+d.disc+'%</div><div style="font-size:11px;color:var(--fa);text-decoration:line-through">€'+d.price.toFixed(2)+'</div><div style="font-size:16px;font-weight:600;color:var(--gn)">€'+dp(d)+'</div></div></div>';}).join(''):'<p style="color:var(--mu);font-size:13px;padding:6px 0">No active promotions. <button class="lnk" onclick="nav2(\'dynamic\')">Go to Dynamic Pricing</button></p>';
+}
+function rInv(){
+  const q=(document.getElementById('inv-q')?.value||'').toLowerCase();
+  const cat=document.getElementById('inv-c')?.value||'';
+  const srt=document.getElementById('inv-s')?.value||'exp';
+  let f=IN.filter(i=>(!q||i.name.toLowerCase().includes(q))&&(!cat||i.cat===cat));
+  if(srt==='exp')f=[...f].sort((a,b)=>dL(a.exp)-dL(b.exp));
+  else if(srt==='fresh')f=[...f].sort((a,b)=>a.fresh-b.fresh);
+  else if(srt==='name')f=[...f].sort((a,b)=>a.name.localeCompare(b.name));
+  else if(srt==='stock')f=[...f].sort((a,b)=>a.stock-b.stock);
+  const b=document.getElementById('inv-b');if(!b)return;
+  b.innerHTML=f.length?f.map(i=>{const used=usedIn(i.id);return'<tr><td><span style="font-weight:500">'+i.name+'</span>'+(i.stock<i.min?' <span style="color:var(--am)" title="Low stock — below minimum of '+i.min+' '+i.unit+'">⚠</span>':'')+'</td><td><span class="badge b-gy">'+i.cat+'</span></td><td>'+i.stock+' '+i.unit+'</td><td>€'+i.cost.toFixed(2)+'</td><td>'+eB(i.exp)+'</td><td>'+fB(i.fresh)+'</td><td style="font-size:12px">'+(used.length?used.map(d=>'<button class="lnk" onclick="openDM('+d.id+')">'+d.name+'</button>').join(', '):'<span style="color:var(--fa)">None</span>')+'</td><td><div class="tda"><button class="btn btn-sm btn-ic" onclick="openIM('+i.id+')" title="Edit"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg></button><button class="btn btn-sm btn-dl" onclick="delI('+i.id+')" title="Delete"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></div></td></tr>';}).join(''):'<tr><td colspan="8" class="empty">No ingredients found.</td></tr>';
+}
+function openIM(id){eII=id;const e=id!==null;document.getElementById('ingr-ti').textContent=e?'Edit Ingredient':'Add Ingredient';document.getElementById('ingr-su').textContent=e?'Update the ingredient details.':'Enter the ingredient details to start tracking it.';document.getElementById('ingr-sb').textContent=e?'Save Changes':'Add Ingredient';const def={name:'',cat:'Vegetables',stock:5,unit:'kg',cost:3.00,exp:tStr(),fresh:8,min:1};const s=e?(IN.find(i=>i.id===id)||def):def;document.getElementById('ingr-na').value=s.name;sSel('ingr-ca',s.cat);document.getElementById('ingr-st').value=s.stock;sSel('ingr-un',s.unit);document.getElementById('ingr-co').value=s.cost;document.getElementById('ingr-ex').value=s.exp;document.getElementById('ingr-fr').value=s.fresh;document.getElementById('ingr-fv').textContent=s.fresh;document.getElementById('ingr-mn').value=s.min||1;openM('m-ingr');}
+function saveI(){const name=document.getElementById('ingr-na').value.trim();if(!name){alert('Please enter a name.');return;}const data={name,cat:document.getElementById('ingr-ca').value,stock:parseFloat(document.getElementById('ingr-st').value)||1,unit:document.getElementById('ingr-un').value,cost:parseFloat(document.getElementById('ingr-co').value)||1,exp:document.getElementById('ingr-ex').value||tStr(),fresh:parseInt(document.getElementById('ingr-fr').value)||8,min:parseFloat(document.getElementById('ingr-mn').value)||1};if(eII!==null){IN=IN.map(i=>i.id===eII?{...i,...data}:i);T('Ingredient updated');}else{IN.push({id:nid.i++,...data});T('Ingredient added');}closeM('m-ingr');rAll();}
+function delI(id){if(!confirm('Remove this ingredient? It will be unlinked from any dishes.'))return;IN=IN.filter(i=>i.id!==id);DS=DS.map(d=>({...d,iids:d.iids.filter(x=>x!==id)}));rAll();T('Ingredient removed');}
+function setCat(cat,btn){menuCatF=cat;document.querySelectorAll('#menu-tabs .btn-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');rMenu();}
+function rMenu(){
+  const q=(document.getElementById('menu-q')?.value||'').toLowerCase();
+  let f=DS.filter(d=>(!q||d.name.toLowerCase().includes(q))&&(!menuCatF||d.cat===menuCatF));
+  const b=document.getElementById('menu-b');if(!b)return;
+  if(!f.length){b.innerHTML='<p class="empty">No dishes found.</p>';return;}
+  const cats=[...new Set(f.map(d=>d.cat))];
+  b.innerHTML=cats.map((cat,ci)=>{
+    const items=f.filter(d=>d.cat===cat);
+    return'<div class="sh" style="margin-top:'+(ci>0?'22px':'0')+'">'+cat+'</div><div class="mgrid">'+items.map(d=>{
+      const tags=d.iids.map(id=>{const i=gI(id);return i?'<span class="itag" onclick="openIM('+i.id+')" title="Edit '+i.name+(dL(i.exp)<=2?' (expiring soon)':'')+'" style="'+(dL(i.exp)<=2?'background:var(--rl);color:var(--rd)':'')+'">'+i.name+(dL(i.exp)<=2?' ⚠':'')+'</span>':''}).join('');
+      const av=advice(d);
+      return'<div class="dc"><div class="dc-hd"><span class="dc-n">'+d.name+'</span>'+(d.disc>0?'<span class="badge b-gn">Promoted</span>':av.pct>0?'<span class="badge b-am">Suggest '+av.pct+'%</span>':'')+'</div><div class="dc-d">'+(d.desc||'No description.')+'</div>'+(d.iids.length?'<div class="dc-tg">'+tags+'</div>':'')+'<div class="dc-ft"><div>'+(d.disc>0?'<span style="font-size:18px;font-weight:600;color:var(--gn)">€'+dp(d)+'</span><span style="font-size:12px;color:var(--fa);text-decoration:line-through;margin-left:6px">€'+d.price.toFixed(2)+'</span>':'<span style="font-size:18px;font-weight:600">€'+d.price.toFixed(2)+'</span>')+'</div><div style="display:flex;gap:7px"><button class="btn btn-sm" onclick="openDM('+d.id+')">Edit</button><button class="btn btn-sm" onclick="startAdj('+d.id+')" style="'+(d.disc>0?'':'color:var(--am);border-color:var(--ab)')+'">'+( d.disc>0?'Adjust':'Set deal')+'</button><button class="btn btn-sm btn-dl" onclick="delD('+d.id+')">Delete</button></div></div></div>';
+    }).join('')+'</div>';
+  }).join('');
+}
+function openDM(id){eDI=id;const e=id!==null;document.getElementById('dish-ti').textContent=e?'Edit Dish':'Add Dish';document.getElementById('dish-su').textContent=e?'Update the dish details and linked ingredients.':'Add a new dish to your menu.';document.getElementById('dish-sb').textContent=e?'Save Changes':'Add Dish';const def={name:'',cat:'Starter',price:14.00,desc:'',iids:[]};const s=e?(DS.find(d=>d.id===id)||def):def;document.getElementById('dish-na').value=s.name;sSel('dish-ca',s.cat);document.getElementById('dish-pr').value=s.price;document.getElementById('dish-de').value=s.desc||'';document.getElementById('dish-ic').innerHTML=IN.map(i=>'<label class="ic-lbl"><input type="checkbox" value="'+i.id+'" '+(s.iids.includes(i.id)?'checked':'')+'>'+i.name+(dL(i.exp)<=2?' <span style="color:var(--rd);font-size:10px">exp soon</span>':'')+'<span style="color:var(--mu);font-size:11px">('+i.cat+')</span></label>').join('');openM('m-dish');}
+function saveD(){const name=document.getElementById('dish-na').value.trim();if(!name){alert('Please enter a name.');return;}const iids=[...document.querySelectorAll('#dish-ic input:checked')].map(el=>parseInt(el.value));const data={name,cat:document.getElementById('dish-ca').value,price:parseFloat(document.getElementById('dish-pr').value)||12,desc:document.getElementById('dish-de').value,iids};if(eDI!==null){DS=DS.map(d=>d.id===eDI?{...d,...data}:d);T('Dish updated');}else{DS.push({id:nid.d++,...data,disc:0});T('Dish added');}closeM('m-dish');rAll();}
+function delD(id){if(!confirm('Remove this dish?'))return;DS=DS.filter(d=>d.id!==id);rAll();T('Dish removed');}
+function rDyn(){const b=document.getElementById('dp-b');if(!b)return;b.innerHTML=DS.map(d=>{const av=advice(d);return'<div class="dpc"><div class="dpc-hd"><span class="dpc-n">'+d.name+'</span>'+(d.disc>0?'<span class="badge b-gn">↓ '+d.disc+'% off</span>':av.pct>0?'<span class="badge b-am">Suggested '+av.pct+'%</span>':'')+'</div><div class="dpc-c">'+d.cat+'</div><div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px">'+(d.disc>0?'<span style="font-size:20px;font-weight:600;color:var(--gn)">€'+dp(d)+'</span><span style="font-size:13px;color:var(--fa);text-decoration:line-through">€'+d.price.toFixed(2)+'</span>':'<span style="font-size:20px;font-weight:600">€'+d.price.toFixed(2)+'</span>')+'</div>'+avHTML(av)+'<div style="display:flex;gap:8px;margin-top:auto"><button class="btn btn-sm" onclick="startAdj('+d.id+')" style="flex:1;justify-content:center">Adjust Price</button>'+(d.disc>0?'<button class="btn btn-sm btn-dl" onclick="resetD('+d.id+')">Reset</button>':'')+'</div></div>';}).join('');}
+function startAdj(id){adjId=id;const d=DS.find(x=>x.id===id);const av=advice(d);const v=d.disc||av.pct||10;document.getElementById('adj-na').textContent=d.name;document.getElementById('adj-su').textContent=d.cat+' — base price €'+d.price.toFixed(2);const box=document.getElementById('adj-av');box.className='aj-av '+av.level;const at=document.getElementById('adj-at');at.className='aj-av-t '+av.level;if(av.level==='none'){at.textContent='No discount recommended — all linked ingredients are fresh';}else{const em=av.level==='high'?'red':'orange';at.innerHTML=(av.level==='high'?'High':'Medium')+' urgency — Recommended: <strong>'+av.pct+'%</strong> (score '+av.score+')';}document.getElementById('adj-ar').innerHTML=av.reasons.map(r=>'<span>• '+r+'</span>').join('');document.getElementById('adj-sl').value=v;updAdj(v);openM('m-adj');}
+function updAdj(v){const d=DS.find(x=>x.id===adjId);if(!d)return;const p=parseInt(v);document.getElementById('adj-pc').textContent=p+'%';document.getElementById('adj-pn').textContent='€'+(d.price*(1-p/100)).toFixed(2);document.getElementById('adj-pw').textContent='was €'+d.price.toFixed(2);document.getElementById('adj-pm').textContent='Guest sees: "Special price today — '+p+'% off"';}
+function saveAdj(){const p=parseInt(document.getElementById('adj-sl').value);DS=DS.map(d=>d.id===adjId?{...d,disc:p}:d);closeM('m-adj');rAll();T('Deal activated');}
+function resetD(id){DS=DS.map(d=>d.id===id?{...d,disc:0}:d);rAll();T('Price reset to base');}
+function autoAll(){let n=0;DS=DS.map(d=>{const av=advice(d);if(av.pct>0&&d.disc===0){n++;return{...d,disc:av.pct};}return d;});rAll();T(n?n+' discount'+(n>1?'s':'')+' automatically applied':'All suggestions are already active');}
+function rStaff(){
+  const ac=DS.filter(d=>d.disc>0);
+  const sb=document.getElementById('staff-b');if(!sb)return;
+  sb.innerHTML=ac.length?ac.map(d=>{const av=advice(d);const i=av.ingr;const dl=i?dL(i.exp):99;const expS=i?(dl<=0?'Expires today':dl===1?'Expires tomorrow':'Expires in '+dl+' days'):'';return'<div class="stc"><div class="stc-hd"><span class="stc-n">'+d.name+'</span><span class="badge b-gn">↓ '+d.disc+'% off</span></div><div class="stc-c">'+d.cat+'</div><div class="stc-info">'+(i?'<strong>'+i.name+'</strong> — '+expS+', freshness '+i.fresh+'/10, '+i.stock+' '+i.unit+' remaining':'No linked ingredients with urgency.')+'</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:13px;color:var(--fa);text-decoration:line-through">€'+d.price.toFixed(2)+'</span><span style="font-size:20px;font-weight:600;color:var(--gn)">€'+dp(d)+'</span></div></div>';}).join(''):'<p class="empty" style="grid-column:1/-1">No active deals. <button class="lnk" onclick="nav2(\'dynamic\')">Go to Dynamic Pricing</button></p>';
+  const ar=IN.filter(i=>dL(i.exp)<=2).sort((a,b)=>dL(a.exp)-dL(b.exp));
+  const sw=document.getElementById('staff-w');if(!sw)return;
+  sw.innerHTML=ar.length?ar.map(i=>{const used=usedIn(i.id);const lk=used.filter(d=>d.disc>0);return'<tr><td style="font-weight:500">'+i.name+'</td><td>'+i.stock+' '+i.unit+'</td><td>'+eB(i.exp)+'</td><td>'+fB(i.fresh)+'</td><td style="font-size:12px">'+(used.length?used.map(d=>d.name).join(', '):'<span style="color:var(--fa)">No linked dishes</span>')+'</td><td>'+(lk.length?'<span class="badge b-gn">'+lk.length+' deal'+(lk.length>1?'s':'')+' active</span>':'<button class="btn btn-sm" onclick="qDeal('+i.id+')">Set deal</button>')+'</td></tr>';}).join(''):'<tr><td colspan="6" class="empty">No ingredients expiring within 2 days.</td></tr>';
+}
+function qDeal(iid){let n=0;DS=DS.map(d=>{if(d.iids.includes(iid)&&d.disc===0){const av=advice(d);if(av.pct>0){n++;return{...d,disc:av.pct};}}return d;});rAll();T(n?'Deal applied to '+n+' dish'+(n>1?'es':''):'No matching dishes without a deal');}
+function updDeduct(){const name=(document.getElementById('waste-in')?.value||'').trim();const qty=parseFloat(document.getElementById('waste-qt')?.value)||0;const matched=IN.find(i=>i.name.toLowerCase()===name.toLowerCase());const box=document.getElementById('deduct-box');if(matched&&qty>0){box.classList.add('show');document.getElementById('deduct-prev').textContent=matched.name+': '+matched.stock+' '+matched.unit+' now, will be '+Math.max(0,matched.stock-qty).toFixed(1)+' '+matched.unit+' after deduction.';}else{box.classList.remove('show');const cb=document.getElementById('deduct-cb');if(cb)cb.checked=false;}}
+function rWaste(){
+  const tot=WL.reduce((a,w)=>a+w.cost,0);
+  const wc=document.getElementById('w-c'),wt=document.getElementById('w-t');if(!wc)return;
+  wc.textContent=WL.length;wt.textContent='€'+tot.toFixed(2);
+  const byR={},byI={};
+  WL.forEach(w=>{byR[w.reason]=(byR[w.reason]||0)+w.cost;byI[w.ingr]=(byI[w.ingr]||0)+w.cost;});
+  const ro=['Expired','Overproduction','Preparation Waste','Customer Return','Other'];
+  document.getElementById('wan-r').innerHTML=ro.filter(r=>byR[r]).map(r=>'<div class="wan-row"><span><span class="badge '+rC(r)+'" style="margin-right:6px">'+r+'</span></span><span style="font-weight:500">€'+byR[r].toFixed(2)+'</span></div>').join('');
+  document.getElementById('wan-i').innerHTML=Object.entries(byI).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c],idx)=>'<div class="wan-row"><span style="display:flex;align-items:center;gap:8px"><span style="color:var(--mu);font-size:12px">#'+(idx+1)+'</span>'+n+'</span><span style="font-weight:500;color:var(--rd)">€'+c.toFixed(2)+'</span></div>').join('');
+  const b=document.getElementById('waste-b');
+  b.innerHTML=WL.length?[...WL].reverse().map(w=>{const dt=new Date(w.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});return'<tr><td>'+dt+'</td><td style="font-weight:500">'+w.ingr+'</td><td>'+w.qty+' '+w.unit+'</td><td><span class="badge '+rC(w.reason)+'">'+w.reason+'</span></td><td style="font-weight:500">€'+w.cost.toFixed(2)+'</td><td style="color:var(--mu);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(w.notes||'—')+'</td><td><div class="tda"><button class="btn btn-sm btn-ic" onclick="openWM('+w.id+')" title="Edit"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg></button><button class="btn btn-sm btn-dl" onclick="delW('+w.id+')" title="Delete"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/></svg></button></div></td></tr>';}).join(''):'<tr><td colspan="7" class="empty">No waste entries yet.</td></tr>';
+}
+function openWM(id){eWI=id;const e=id!==null;document.getElementById('waste-ti').textContent=e?'Edit Waste Entry':'Log Waste';document.getElementById('waste-su').textContent=e?'Update the waste entry details.':'Record a food waste entry to track patterns.';document.getElementById('waste-sb').textContent=e?'Save Changes':'Log Waste';const def={ingr:'',date:tStr(),qty:1,unit:'kg',reason:'Expired',cost:0,notes:''};const s=e?(WL.find(w=>w.id===id)||def):def;document.getElementById('waste-in').value=s.ingr;document.getElementById('waste-dt').value=s.date;document.getElementById('waste-qt').value=s.qty;sSel('waste-un',s.unit);document.getElementById('waste-co').value=s.cost;sSel('waste-re',s.reason);document.getElementById('waste-no').value=s.notes;document.getElementById('deduct-box').classList.remove('show');const cb=document.getElementById('deduct-cb');if(cb)cb.checked=false;const dl=document.getElementById('wdl');if(dl)dl.innerHTML=IN.map(i=>'<option value="'+i.name+'">').join('');openM('m-waste');}
+function saveW(){const ingr=document.getElementById('waste-in').value.trim();if(!ingr){alert('Please enter an ingredient.');return;}const data={ingr,date:document.getElementById('waste-dt').value,qty:parseFloat(document.getElementById('waste-qt').value)||1,unit:document.getElementById('waste-un').value,reason:document.getElementById('waste-re').value,cost:parseFloat(document.getElementById('waste-co').value)||0,notes:document.getElementById('waste-no').value};if(eWI!==null){WL=WL.map(w=>w.id===eWI?{...w,...data}:w);T('Waste entry updated');}else{WL.push({id:nid.w++,...data});T('Waste entry logged');}const cb=document.getElementById('deduct-cb');if(cb&&cb.checked){const m=IN.find(i=>i.name.toLowerCase()===ingr.toLowerCase());if(m){IN=IN.map(i=>i.id===m.id?{...i,stock:Math.max(0,+(i.stock-data.qty).toFixed(2))}:i);T('Waste logged and '+m.name+' stock updated');}}closeM('m-waste');rAll();}
+function delW(id){if(!confirm('Remove this entry?'))return;WL=WL.filter(w=>w.id!==id);rAll();T('Entry removed');}
+rAll();
+</script>
+</body>
+</html>
